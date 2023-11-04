@@ -165,6 +165,7 @@ class Scanner {
         advance();
 
         // Trim the surrounding quotes.
+        // TODO: Allow for escape characters (\n e.g.) and escape them here :D
         String value = source.substring(start + 1, current - 1);
         addToken(STRING, value);
     }
