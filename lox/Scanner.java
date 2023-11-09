@@ -94,7 +94,6 @@ class Scanner {
                 break;
             case '/':
                 if (match('/')) {
-                    // A comment goes until the end of the line.
                     while (peek() != '\n' && !isAtEnd())
                         advance();
                 } else {
@@ -129,10 +128,12 @@ class Scanner {
     }
 
     private void identfier() {
-        while (isAlphaNumeric(peek())) advance();
+        while (isAlphaNumeric(peek()))
+            advance();
         String text = source.substring(start, current);
         TokenType type = keywords.get(text);
-        if (type == null) type = IDENTIFIER;
+        if (type == null)
+            type = IDENTIFIER;
         addToken(type);
     }
 

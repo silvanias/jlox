@@ -8,12 +8,8 @@ import static lox.TokenType.LESS;
 public class Interpreter implements Expr.Visitor<Object> {
 
     void interpret(Expr expression) {
-        try {
-            Object value = evaluate(expression);
-            System.out.println(stringify(value));
-        } catch (RuntimeError error) {
-            Lox.runtimeError(error);
-        }
+        Object value = evaluate(expression);
+        System.out.println(stringify(value));
     }
 
     @Override
@@ -42,7 +38,7 @@ public class Interpreter implements Expr.Visitor<Object> {
                 if (left instanceof String && right instanceof String) {
                     return (String) left + (String) right;
                 }
-                throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings.");
+                throw new RuntimeException("Operands must be two numbers or two strings.");
             case GREATER:
                 checkNumberOperands(expr.operator, left, right);
                 return (double) left > (double) right;
@@ -71,24 +67,22 @@ public class Interpreter implements Expr.Visitor<Object> {
             case BANG:
                 return !isTruthy(right);
             case MINUS:
-                checkNumberOperand(expr.operator, right)
+                checkNumberOperand(expr.operator, right);
                 return -(double) right;
         }
-        // Unreachable.
         return null;
     }
 
     private void checkNumberOperand(Token operator, Object operand) {
         if (operand instanceof Double)
             return;
-        throw new RuntimeError(operator,
-                "Operand must be a number.");
+        throw new RuntimeException("Operand must be a number.");
     }
 
     private void checkNumberOperands(Token operator, Object left, Object right) {
         if (left instanceof Double && right instanceof Double)
             return;
-        throw new RuntimeError(operator, "Operands must be numbers.");
+        throw new RuntimeException("Operands must be numbers.");
     }
 
     private boolean isTruthy(Object object) {
