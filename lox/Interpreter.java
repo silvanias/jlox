@@ -1,10 +1,5 @@
 package lox;
 
-import static lox.TokenType.BANG;
-import static lox.TokenType.EQUAL;
-import static lox.TokenType.GREATER;
-import static lox.TokenType.LESS;
-
 public class Interpreter implements Expr.Visitor<Object> {
 
     String interpret(Expr expression) {
