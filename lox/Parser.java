@@ -1,11 +1,12 @@
 package lox;
 
 import java.util.List;
+import java.util.function.Supplier;
+
 import static lox.TokenType.*;
 
 class Parser {
     private static class ParseError extends RuntimeException {
-        // TODO: synchronise based on error
     }
 
     private final List<Token> tokens;
@@ -28,41 +29,26 @@ class Parser {
     }
 
     private Expr equality() {
-        Expr expr = comparison();
-        while (match(BANG_EQUAL, EQUAL_EQUAL)) {
-            Token operator = previous();
-            Expr right = comparison();
-            expr = new Expr.Binary(expr, operator, right);
-        }
-        return expr;
+        return binaryOperation(this::comparison, BANG_EQUAL, EQUAL_EQUAL);
     }
 
-    // TODO: Refactor opportunity
     private Expr comparison() {
-        Expr expr = term();
-        while (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
-            Token operator = previous();
-            Expr right = term();
-            expr = new Expr.Binary(expr, operator, right);
-        }
-        return expr;
+        return binaryOperation(this::term, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL);
     }
 
     private Expr term() {
-        Expr expr = factor();
-        while (match(MINUS, PLUS)) {
-            Token operator = previous();
-            Expr right = factor();
-            expr = new Expr.Binary(expr, operator, right);
-        }
-        return expr;
+        return binaryOperation(this::factor, MINUS, PLUS);
     }
 
     private Expr factor() {
-        Expr expr = unary();
-        while (match(SLASH, STAR)) {
+        return binaryOperation(this::unary, SLASH, STAR);
+    }
+
+    private Expr binaryOperation(Supplier<Expr> operandSupplier, TokenType... operators) {
+        Expr expr = operandSupplier.get();
+        while (match(operators)) {
             Token operator = previous();
-            Expr right = unary();
+            Expr right = operandSupplier.get();
             expr = new Expr.Binary(expr, operator, right);
         }
         return expr;
