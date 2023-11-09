@@ -53,7 +53,8 @@ public class Lox {
         if (hadError)
             return;
 
-        interpreter.interpret(expression);
+        String result = interpreter.interpret(expression);
+        System.out.println(result);
     }
 
     static void error(int line, String message) {

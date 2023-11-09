@@ -104,7 +104,6 @@ class Scanner {
             case ' ':
             case '\r':
             case '\t':
-                // Ignore whitespace.
                 break;
             case '\n':
                 line++;
@@ -120,7 +119,6 @@ class Scanner {
                 } else if (isAlpha(c)) {
                     identfier();
                 } else {
-                    // TODO: Stop syntax error bomb by coalescing to single error
                     Lox.error(line, "Unexpected character.");
                 }
                 break;
@@ -147,7 +145,6 @@ class Scanner {
             while (isDigit(peek()))
                 advance();
         }
-        // TODO: Implement own method of parsing double
         addToken(NUMBER, Double.parseDouble(source.substring(start, current)));
     }
 

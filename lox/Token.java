@@ -4,7 +4,6 @@ class Token {
     final TokenType type;
     final String lexeme;
     final Object literal;
-    // TODO: implement column and length for more accurate error report
     final int line;
 
     Token(TokenType type, String lexeme, Object literal, int line) {

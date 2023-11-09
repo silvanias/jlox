@@ -7,9 +7,9 @@ import static lox.TokenType.LESS;
 
 public class Interpreter implements Expr.Visitor<Object> {
 
-    void interpret(Expr expression) {
+    String interpret(Expr expression) {
         Object value = evaluate(expression);
-        System.out.println(stringify(value));
+        return stringify(value);
     }
 
     @Override
@@ -56,7 +56,6 @@ public class Interpreter implements Expr.Visitor<Object> {
             case EQUAL_EQUAL:
                 return isEqual(left, right);
         }
-        // Unreachable.
         return null;
     }
 
