@@ -46,7 +46,7 @@ class Scanner {
         tokens.add(new Token(EOF, "", null, line));
         return tokens;
     }
-
+    
     private void scanToken() {
         char c = advance();
         switch (c) {
@@ -117,7 +117,7 @@ class Scanner {
                 if (isDigit(c)) {
                     number();
                 } else if (isAlpha(c)) {
-                    identfier();
+                    identifier();
                 } else {
                     Lox.error(line, "Unexpected character.");
                 }
@@ -125,7 +125,7 @@ class Scanner {
         }
     }
 
-    private void identfier() {
+    private void identifier() {
         while (isAlphaNumeric(peek()))
             advance();
         String text = source.substring(start, current);
@@ -158,14 +158,10 @@ class Scanner {
             Lox.error(line, "Unterminated string.");
             return;
         }
-
-        // The closing "
         advance();
 
-        // Trim the surrounding quotes.
-        // TODO: Allow for escape characters (\n e.g.) and escape them here :D
-        String value = source.substring(start + 1, current - 1);
-        addToken(STRING, value);
+        String trimmedValue = source.substring(start + 1, current - 1);
+        addToken(STRING, trimmedValue);
     }
 
     private boolean match(char expected) {
